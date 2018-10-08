@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>声明式渲染</title>
+
+    <!-- 引入vue -->
+    <!-- 开发环境，包含有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 生产环境，优化尺寸和速度 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+</head>
+<body>
+    <h1>声明式渲染</h1>
+    <div id="app">{{message}}</div>
+    <script type="text/javascript">
+        var app = new Vue({
+            el : '#app',
+            data : {
+                message : 'Hello Vue!'
+            }
+        })
+    </script>
+    <hr/>
+    <div id="app-2">
+        <span v-bind:title = "message">
+            鼠标悬停几秒钟查看此动态绑定的提示信息！
+        </span>
+    </div>
+    <script type="text/javascript">
+        var app2 = new Vue({
+            el : '#app-2',
+            data : {
+                message : '页面加载' + new Date().toLocaleString()
+            }
+        })
+    </script>
+</body>
+</html>
