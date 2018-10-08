@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>指令</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <p>指令 (Directives) 是带有 v- 前缀的特殊特性。指令特性的值预期是单个 JavaScript 表达式 (v-for 是例外情况，稍后我们再讨论)。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。回顾我们在介绍中看到的例子：</p>
+    <p v-if="seen">现在你看到了我</p>
+    <p>这里，v-if 指令将根据表达式 seen 的值的真假来插入/移除 <p> 元素。</p>
+    <h1>参数</h1>
+        <p>一些指令能够接收一个“参数”，在指令名称之后以冒号表示。例如，v-bind 指令可以用于响应式地更新 HTML 特性：</p>
+        <a v-bind:href="url">...</a>
+        <p>在这里 href 是参数，告知 v-bind 指令将该元素的 href 特性与表达式 url 的值绑定。</p>
+        <p>另一个例子是 v-on 指令，它用于监听 DOM 事件：</p>
+        <a v-on:click="doSomething">...</a>
+        <p>在这里参数是监听的事件名。我们也会更详细地讨论事件处理。</p>
+    <h1>修饰符</h1>
+        <p>修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：</p>
+        <form v-on:submit.prevent="onSubmit">...</form>
+        <p>在接下来对 v-on 和 v-for 等功能的探索中，你会看到修饰符的其它例子。</p>
+        
+</body>
+</html>
