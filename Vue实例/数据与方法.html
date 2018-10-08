@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据与方法</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <p>使用 Object.freeze()，这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。</p>
+    <div id="app">
+        <p>{{foo}}</p>
+        <button v-on:click="foo = 'baz'">Change it</button>
+    </div>
+    <script>
+            var obj = {
+                foo: 'bar'
+            }
+    
+            Object.freeze(obj)
+    
+            var vue = new Vue({
+                el : '#app',
+                data : obj
+            })
+        </script>
+        <hr/>
+        <p>除了数据属性，Vue 实例还暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来</p>
+        <script>
+            var data = { a : 1};
+            var vm = new Vue({
+                el : '#example',
+                data : data 
+            });
+
+            vm.$data === data ;//=> true
+            vm.$el === document.getElementById('example') ;//=>true
+
+            //$watch 是一个实例方法
+            vm.$watch('a',function(newValue,oldValue){
+                //这个回调将在 'vm.a'改变后调用
+            })
+        </script>
+</body>
+
+</html>
