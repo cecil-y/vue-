@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-if</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <p>在字符串模板中，比如 Handlebars，我们得像这样写一个条件块：</p>
+    <!-- Handlebars模版 -->
+    {{#if ok}}<h4>Yes</h4>{{/if}}
+    <p>在Vue中，我们使用v-if指令显示同样的功能：</p>
+    <h4 v-if="ok">Yes</h4>
+    <p>也可以使用v-else添加一个"else"块</p>
+    <h4 v-if="ok">Yes</h4>
+    <h4 v-else>No</h4>
+    <h1>在&lt;template&gt;元素上使用v-if条件渲染分组</h1>
+    <p>因为 v-if 是一个指令，所以必须将它添加到一个元素上。但是如果想切换多个元素呢？此时可以把一个 &lt;template&gt; 元素当做不可见的包裹元素，并在上面使用 v-if。最终的渲染结果将不包含 &lt;template&gt; 元素。</p>
+    <template v-if="ok">
+        <h4>Title</h4>
+        <p>Paragraph 1</p>
+        <p>Paragraph 2</p>
+    </template>
+
+
+
+    <h1>v-else</h1>
+
+
+    <h1>v-else-if</h1>
+
+
+    <h1>用key管理可复用的元素</h1>
+
+
+</body>
+</html>
