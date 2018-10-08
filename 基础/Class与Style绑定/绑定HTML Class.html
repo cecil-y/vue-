@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绑定HTML Class</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h1>对象语法</h1>
+        <p>我们可以传给 v-bind:class 一个对象，以动态地切换 class：</p>
+        <div v-bind:class="{active:isActive}"></div>
+        <p>上面的语法表示 active 这个 class 存在与否将取决于数据属性 isActive 的 truthiness。</p>
+        <p>你可以在对象中传入更多属性来动态切换多个 class。此外，v-bind:class 指令也可以与普通的 class 属性共存。当有如下模板:</p>
+        <div id="obj" class="static" v-bind:class="{ active:isActive, 'text-danger':hasError}">测试class</div>
+        <script tpye="text/javascript">
+            var obj = new Vue({
+                el : '#obj',
+                data : {
+                    isActive : false ,
+                    hasError : true 
+                }
+            })
+        </script>
+        <p>当 isActive 或者 hasError 变化时，class 列表将相应地更新。例如，如果 hasError 的值为 true，class 列表将变为 "static active text-danger"。</p>
+        <div id="obj1" v-bind:class="classObject">绑定的数据对象不必内联定义在模板里：</div>
+        <script type="text/javascript">
+            var obj1 = new Vue({
+                el : '#obj1',
+                data : {
+                    classObject : {
+                        active : true ,
+                        'text-danger' : false
+                    }
+                }
+            })
+        </script>
+        <div id="obj2" v-bind:class="classObject">渲染的结果和上面一样。我们也可以在这里绑定一个返回对象的计算属性。这是一个常用且强大的模式：</div>
+        <script type="text/javascript">
+            var obj2 = new Vue({
+                el : '#obj2',
+                data : {
+                    isActive : true ,
+                    error : null 
+                },
+                computed: {
+                    classObject : function(){
+                        return {
+                            active : this.isActive && ! this.error,
+                            'text-danger' : this.error && this.error.type === 'fatal'
+                        }
+                    }
+                }
+            })
+        </script>
+    <h1>数组语法</h1>
+        <div id="array" v-bind:class="[activeClass, errorClass]">我们可以把一个数组传给 v-bind:class，以应用一个 class 列表：</div>
+        <script type="text/javascript">
+            var array = new Vue({
+                el : '#array',
+                data : {
+                    activeClass : 'active',
+                    errorClass : 'text-danger'
+                }
+            })
+        </script>
+        <div id="array1" v-bind:class="[isActive? activeClass : '', errorClass]">如果你也想根据条件切换列表中的 class，可以用三元表达式：</div>
+        <p>这样写将始终添加 errorClass，但是只有在 isActive 是 truthy 时才添加 activeClass。</p>
+        <div v-bind:class="[{active : isActive}, errorClass]">不过，当有多个条件 class 时这样写有些繁琐。所以在数组语法中也可以使用对象语法：</div>
+    <h1>用在组件上</h1>
+        <P style="color:red">需要对Vue组件有一定的了解</P>
+        <p>当在一个自定义组件上使用 class 属性时，这些类将被添加到该组件的根元素上面。这个元素上已经存在的类不会被覆盖。</p>
+        <p>例如，如果你声明了这个组件：</p>
+        <script type="text/javascript">
+            Vue.component('my-component',{
+                template: '<p class="foo bar ">Hi</p>'
+            })
+        </script>
+        <my-component class="baz boo">然后在使用它的时候添加一些 class：</my-component>
+        <p>HTML 将被渲染为:</p>
+        <p class="foo bar baz boo">Hi</p>
+        <my-component v-bind:class="{active : isActive}">对于带数据绑定 class 也同样适用：</my-component>
+        <p>当 isActive 为 truthy 时，HTML 将被渲染成为：</p>
+        <p class="foo bar active">Hi</p>
+</body>
+</html>

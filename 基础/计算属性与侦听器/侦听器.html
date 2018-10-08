@@ -27,7 +27,7 @@
             el : '#watch-example',
             data : {
                 question : '',
-                answer : 'I cannot give you an answoer nutil you ask a question!'
+                answer : 'I cannot give you an answoer until you ask a question!'
             },
             watch : {
                 //如果 'question' 发生改变，这个函数就会运行
@@ -43,7 +43,7 @@
                 this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
             },
             methods : {
-                getAanswer : function() {
+                getAnswer : function() {
                     if(this.question.indexOf('?') === -1){
                         this.answer = 'Question usually contain a question mark. ;-)';
                         return ;
@@ -60,6 +60,7 @@
             }
         })
     </script>
-
+    <p>在这个示例中，使用 watch 选项允许我们执行异步操作 (访问一个 API)，限制我们执行该操作的频率，并在我们得到最终结果前，设置中间状态。这些都是计算属性无法做到的。</p>
+    <p>除了 watch 选项之外，您还可以使用命令式的 vm.$watch API。</p>
 </body>
 </html>
