@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-show</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <p>另一个用于根据条件展示元素的选项是 v-show 指令。用法大致一样：</p>
+    <h4 id="obj1" v-show="ok">Hello!</h4>
+    <script>
+        var obj1 = new Vue({
+            el : '#obj1',
+            data : {
+                ok : true
+            }
+        })
+    </script>
+    <p>不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 只是简单地切换元素的 CSS 属性 display。</p>
+    <p style="color:red">注意，v-show 不支持 &lt;template&gt; 元素，也不支持 v-else。</p>
+</body>
+</html>

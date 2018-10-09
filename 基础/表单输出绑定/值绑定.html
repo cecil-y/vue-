@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>值绑定</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <p>对于单选按钮，复选框及选择框的选项，v-model 绑定的值通常是静态字符串 (对于复选框也可以是布尔值)：</p>
+    <p>当选中时，'picked'为字符串“a” <input type="radio" v-model="picked" value="a" /> </p>
+    <p>'toggle'为true或false<input type="checkbox" v-model="toggle"> </p>
+    <p>当选中第一个选项时，`selected` 为字符串 "abc"
+        <select v-model="selected">
+            <option value="abc">ABC</option>
+        </select>
+    </p>
+    <p>但是有时我们可能想把值绑定到 Vue 实例的一个动态属性上，这时可以用 v-bind 实现，并且这个属性的值可以不是字符串。</p>
+    <h1>复选框</h1>
+    <div id="obj-1">
+        <input type="checkbox" v-model="toggle" true-value="yes" false-value="no">
+        <p>{{ toggle }}</p>
+    </div>
+    <script>
+        var obj1 = new Vue({
+            el: '#obj-1',
+            data: {
+                toggle: ''
+            }
+        })
+            //当选中时
+            //vm.toggle ==='yes';
+            //当没有选中时
+            //vm.toggle === 'no';
+    </script>
+    <p>这里的 true-value 和 false-value 特性并不会影响输入控件的 value
+        特性，因为浏览器在提交表单时并不会包含未被选中的复选框。如果要确保表单中这两个值中的一个能够被提交，(比如“yes”或“no”)，请换用单选按钮。</p>
+    <h1>单选按钮</h1>
+        <div id="obj-3">
+            <input type="radio" v-model="pick" v-bind:value="a" />
+        </div>
+        <p>obj-3.pick : {{ pick }}</p>
+        <script>
+            var obj3 = new Vue({
+                el : '#obj-3',
+                data : {
+                    pick : '',
+                    a : 'true'
+                }
+            })
+        </script>
+    <h1>选择框的选项</h1>
+    <div id="obj-2">
+        <select v-model="selected">
+            <option v-bind:value="{number : 123}">123</option>
+        </select>
+        <p>selected : {{ selected }}</p>
+        <p>selected.number : {{ selected.number }}</p>
+    </div>
+    <script>
+        var obj2 = new Vue({
+            el : '#obj-2',
+            data : {
+                selected : ''
+            }
+        })
+    </script>
+    <!-- // 当选中时 -->
+    <!-- typeof vm.selected // => 'object' -->
+    <!-- vm.selected.number // => 123 -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一段取值范围的v-for</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+        <p>v-for 也可以取整数。在这种情况下，它将重复多次模板。</p>
+        <div id="obj1">
+            <span v-for="n in 10">{{ n }}</span>
+        </div>
+        <script>
+            var obj1 = new Vue({
+                el : '#obj1'
+            })
+        </script>
+</body>
+</html>

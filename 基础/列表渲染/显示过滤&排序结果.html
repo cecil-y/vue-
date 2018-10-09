@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>显示过滤&排序结果</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <p>有时，我们想要显示一个数组的过滤或排序副本，而不实际改变或重置原始数据。在这种情况下，可以创建返回过滤或排序数组的计算属性。</p>
+    <ul id="obj1">
+    <li v-for="n in evenNumbers">{{n}}</li>
+    </ul>
+    <script>
+        var obj1 = new Vue({
+            el : '#obj1',
+            data : {
+                numbers : [1,2,3,4,5]
+            },
+            computed:{
+                evenNumbers : function(){
+                    return this.numbers.filter(function (number){
+                        return number %2 == 0;
+                    })
+                }
+            }
+        })
+    </script>
+    <p>在计算属性不适用的情况下 (例如，在嵌套 v-for 循环中) 你可以使用一个 method 方法：</p>
+    <ul id="obj2">
+        <li v-for="n in even(numbers)">{{n}}</li>
+    </ul>
+    <script>
+        var obj2 = new Vue({
+            el : '#obj2',
+            data : {
+                numbers : [1,2,3,4,5]
+            },
+            methods:{
+                even: function(numbers){
+                    return numbers.filter(function (number){
+                        return number%2 == 0;
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
