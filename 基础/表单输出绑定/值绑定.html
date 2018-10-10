@@ -41,14 +41,14 @@
     <h1>单选按钮</h1>
         <div id="obj-3">
             <input type="radio" v-model="pick" v-bind:value="a" />
+            <p>obj-3.pick : {{ pick }}</p>
         </div>
-        <p>obj-3.pick : {{ pick }}</p>
         <script>
             var obj3 = new Vue({
                 el : '#obj-3',
                 data : {
                     pick : '',
-                    a : 'true'
+                    a : '显示a的值'
                 }
             })
         </script>
@@ -71,8 +71,6 @@
     <!-- // 当选中时 -->
     <!-- typeof vm.selected // => 'object' -->
     <!-- vm.selected.number // => 123 -->
-
-
 </body>
 
 </html>

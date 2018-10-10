@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>通过Prop向子组件传递数据</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <p>早些时候，我们提到了创建一个博文组件的事情。问题是如果你不能向这个组件传递某一篇博文的标题或内容之类的我们想展示的数据的话，它是没有办法使用的。这也正是 prop 的由来。</p>
+    <p>Prop 是你可以在组件上注册的一些自定义特性。当一个值传递给一个 prop 特性的时候，它就变成了那个组件实例的一个属性。为了给博文组件传递一个标题，我们可以用一个 props 选项将其包含在该组件可接受的 prop 列表中：</p>
+    <script>
+        Vue.component('blog-post',{
+            props:['title'],
+            template : '<h3>{{title}}</h3>'
+        })
+    </script>
+    <p>一个组件默认可以拥有任意数量的 prop，任何值都可以传递给任何 prop。在上述模板中，你会发现我们能够在组件实例中访问这个值，就像访问 data 中的值一样。</p>
+    <p>一个 prop 被注册之后，你就可以像这样把数据作为一个自定义特性传递进来：</p>
+    <div id="obj-1">
+    <blog-post title="My joureny with Vue" ></blog-post>
+    <blog-post title="Blogging with Vue"></blog-post>
+    <blog-post title="Why Vue is so fun"></blog-post>
+    </div>
+    <script>
+        new Vue({
+            el : '#obj-1'
+        })
+    </script>
+    <p>想要为每篇博文渲染一个组件：</p>
+    <div id="blog-post-demo">
+        <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></blog-post>
+    </div>
+    <p>然而在一个典型的应用中，你可能在 data 里有一个博文的数组：</p>
+    <script>
+        new Vue({
+            el : '#blog-post-demo',
+            data : {
+                posts : [
+                    { id : 1 , title : 'My joureny with Vue'},
+                    { id : 2 , title : 'Blogging with Vue'},
+                    { id : 3 , title : 'Why Vue is so fun'}
+                ]
+            }
+        })
+    </script>
+    <p>如上所示，你会发现我们可以使用 v-bind 来动态传递 prop。这在你一开始不清楚要渲染的具体内容，比如从一个 API 获取博文列表的时候，是非常有用的。</p>
+    <p>到目前为止，关于 prop 你需要了解的大概就这些了，如果你阅读完本页内容并掌握了它的内容，我们会推荐你再回来把 prop 读完。</p>
+</body>
+</html>
