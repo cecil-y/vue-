@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>通过插槽分发内容</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <p>和 HTML 元素一样，我们经常需要向一个组件传递内容，像这样：</p>
+    <alert-box>
+        Something bad happened.
+    </alert-box>
+    <p>Vue 自定义的 <slot> 元素让这变得非常简单:</p>
+    <script>
+        Vue.component('alert-box', {
+            template: '<div class="demo-alert-box"><strong>Error!</strong><slot></slot></div>'
+        });
+    </script>
+    <div id="alertbox">
+        <alert-box>
+            Something bad happened.
+        </alert-box>
+    </div>
+    <script>
+        new Vue({
+            el: '#alertbox'
+        })
+    </script>
+    <p>如你所见，我们只要在需要的地方加入插槽就行了——就这么简单！</p>
+    <p>到目前为止，关于插槽你需要了解的大概就这些了，如果你阅读完本页内容并掌握了它的内容，我们会推荐你再回来把插槽读完。</p>
+</body>
+
+</html>
