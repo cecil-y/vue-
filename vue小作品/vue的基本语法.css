@@ -1,0 +1,11 @@
+.static{
+    width: 200px;
+    height: 100px;
+    background: #ccc;
+}
+.active{
+    color : red ;
+}
+.error{
+    font-weight: 800;
+}

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue基本语法</title>
+
+    <link rel="stylesheet" href="vue的基本语法.css" type="text/css"/>
+    <script src="../VueJS/vue.js"></script>
+</head>
+
+<body>
+    <h1>通过构造函数Vue创建一个Vue的根实例</h1>
+    <div id="obj-1"></div>
+    <script>
+        var obj1 = new Vue({
+            el: '#obj-1',
+            data: {
+
+            },
+            methods: {
+
+            }
+        });
+        //扩展Vue构造器
+        var MyComponent = Vue.extend({
+            //扩展内容
+        });
+        var vm = new MyComponent({});
+    </script>
+    <!-- 解读：
+    使用Vue构造函数创建一个Vue实例，然后通过Vue实例的el接口实现和HTML元素的挂载；
+    构造函数Vue需要传入一个选项对象，可包含挂载元素、数据、方法和生命周期钩子等；
+    构造函数Vue可以通过extend方法实现扩展，从而可以用预定义的选项创建可复用的组件构造函数，但是构建组件的常用方法是使用Vue.component()接口去实现； -->
+
+
+    <h1>Vue实例的属性和方法</h1>
+    <div id="obj-2">
+        {{message}}&nbsp;&nbsp;&nbsp;&nbsp;<button v-on:click="sayHello">clicke me</button>
+    </div>
+    <script>
+        var obj2 = new Vue({
+            el: '#obj-2',
+            data: {
+                message: 'Hello World',
+                sayHello: function () {
+                    console.log(1);
+                }
+            }
+        })
+    </script>
+    <!-- 如果想要获取到obj2这一实例中选项的对象，Vue提供$进行获取(在控制台输入)
+    app.$el === document.getElementById('obj-2')//true
+    app.$data.message // helol world -->
+    <!-- 注意：Vue实例所代理data对象上的属性只有在实例创建的同时进行初始化才具有响应式更新，若在实例创建之后添加是不会触发视图更新的 -->
+
+    <h1>数据绑定操作</h1>
+    <h2>#绑定文本和HTML</h2>
+    <div id="obj-3">
+        {{msg}}
+        <div v-html="hi"></div>
+    </div>
+    <script>
+        var obj3 = new Vue({
+            el: '#obj-3',
+            data: {
+                msg: 'hello world!',
+                hi: '<h4>hi</h4>'
+            }
+        })
+    </script>
+    <!-- 解读：
+        HTML部分实现数据的动态绑定，这个数据是vue实例的属性值；
+        JS部分的语法可以从jQuery角度去理解，相当于创建一个Vue实例，这个实例指向#app，并在Vue提供的固定接口data上定义Vue实例的属性；
+        使用{{message}}的mustache语法只能将数据解释为纯文本，为了输出HTML，可以使用v-html指令； -->
+
+    <h2>#绑定数据在元素的属性</h2>
+    <div id="obj-4" v-bind:title='message' v-bind:style='red' v-once>
+        {{message}}
+    </div>
+    <script>
+        var obj4 = new Vue({
+            el: '#obj-4',
+            data: {
+                message: 'hello world!',
+                red: 'color:red'
+            }
+        })
+    </script>
+    <!-- 解读：
+        定义在Vue实例的data接口上的数据的绑定灵活的，可以绑定在DOM节点内部，也可以绑在属性上；
+        绑定数据到节点属性上时，需要使用v-bind指令，这个元素节点的 title属性和 Vue 实例的 message属性绑定到一起，从而建立数据与该属性值的绑定，也可以使用v-bind:href="url"的缩写方式:href="url"；
+        v-once指令能够让你执行一次性的插值，当数据改变时，插值处的内容不会更新； -->
+
+    <h2>#使用JS表达式处理数据</h2>
+    <div id="obj-5">
+        <p v-once>{{ num + 10}}</p>
+        <p v-if='seen'>{{ message + ' jirengu' }}</p>
+    </div>
+    <script>
+        var obj5 = new Vue({
+            el: '#obj-5',
+            data: {
+                num: 10,
+                message: 'hello world!',
+                seen: true
+            }
+        })
+    </script>
+
+    <h2>#使用过滤器来格式化数据</h2>
+    <div id="obj-6">
+        <p v-if="seen">{{ message | capitalize }}</p>
+    </div>
+    <script>
+        var obj6 = new Vue({
+            el: '#obj-6',
+            data: {
+                message: 'hello world',
+                seen: true
+            },
+            filters: {
+                capitalize: function (value) {
+                    if (!value) return '';
+                    value = value.toString();
+                    return value.charAt(0).toUpperCase() + value.slice(1);
+                }
+            }
+        })
+    </script>
+    <!-- 输出结果，h变成H，然后拼接value.slice(1) -->
+
+    <h2>#条件指令控制DOM元素的显示操作</h2>
+    <div id="obj-7">
+        <p v-if='seen'>{{message}}</p>
+    </div>
+    <script>
+        var obj7 = new Vue({
+            el: '#obj-7',
+            data: {
+                message: 'hello world!',
+                seen: true
+            }
+        })
+    </script>
+    <!-- 解读：
+        v-if指令可以绑定一个属性值为布尔型的属性，当值为真时，元素将显示，反之则消失； -->
+
+    <h2>#循环指令实现数据的遍历</h2>
+    <div id="obj-8">
+        <ol>
+            <li v-for='item in items'>{{ item.text }}</li>
+        </ol>
+    </div>
+    <script>
+        var obj8 = new Vue({
+            el: '#obj-8',
+            data: {
+                items: [
+                    { text: 'Vue' },
+                    { text: 'React' },
+                    { text: 'Angular' }
+                ]
+            }
+        })
+    </script>
+    <!-- 解读：
+        v-for可以绑定数组型数据进行绑定，并使用item in items形式，从而数据的遍历操作； -->
+
+    <h2>#事件绑定指令可以实现事件监听</h2>
+    <div id="obj-9">
+        <p>{{ message }}</p>
+        <button v-on:click='reverseMessage'>reverseMessage</button>
+    </div>
+    <script>
+        var obj9 = new Vue({
+            el: '#obj-9',
+            data: {
+                message: 'hello world!'
+            },
+            methods: {
+                reverseMessage: function () {
+                    this.message = this.message.split('').reverse().join('');
+                }
+            }
+        })
+    </script>
+    <!-- split() 方法用于把一个字符串分割成字符串数组。
+        reverse() 方法用于颠倒数组中元素的顺序。
+        join() 方法用于把数组中的所有元素放入一个字符串。 -->
+    <!-- 解读：
+    v-on指令用于监听事件操作，click="reverseMessage"定义点击事件后执行的回调函数；
+    v-on指令也可以采用缩写方式：@click="method"
+    在Vue实例中，提供methods接口用于统一定义函数； -->
+
+    <!-- 小结
+    本章涉及Vue的基础的数据绑定操作，内容包括：
+    {{message}}实现文本数据的绑定，并且文本数据可以使用JS表达式和过滤器进行进一步处理；
+    -v-html="hi"实现HTML数据的绑定；
+    v-bind:href="url"实现属性数据的绑定；
+    v-if="seen"和v-for="item in items"指令实现流程控制；
+    v-on:click="method"指令实现事件监听 -->
+
+
+    <h1>计算属性</h1>
+    <div id="obj-10">
+        <p>Original message : {{message}}</p>
+        <p>Reversed message : {{ReversedMessage}}</p>
+    </div>
+    <script>
+        var obj10 = new Vue({
+            el: '#obj-10',
+            data: {
+                message: 'hello world!'
+            },
+            computed: {
+                ReversedMessage: function () {
+                    return this.message.split('').reverse().join('');
+                }
+            }
+        })
+    </script>
+    <!-- 解读：
+    Vue实例提供computed对象，我们可以在对象内部定义需要进行计算的属性ReverseMessage，而提供的函数将作为属性的getter，即获取器；
+    上述的代码使得app.ReverseMessage依赖于app.message；
+    与先前直接在{{message.split('').reverse().join('') }}使用表达式相比，它让模板过重并且难以维护代码； -->
+
+    <p>computed与methods</p>
+    <div id="obj-11">
+        <p>Original message : {{message}}</p>
+        <p>Reversed message : {{ReversedMessage}}</p>
+        <p>Reversed message : {{reversedMessage()}}</p>
+    </div>
+    <script>
+        var obj11 = new Vue({
+            el: '#obj-11',
+            data: {
+                message: 'hello world!'
+            },
+            computed: {
+                ReversedMessage: function () {
+                    return this.message.split('').reverse().join('');
+                }
+            },
+            methods: {
+                reversedMessage: function () {
+                    return this.message.split('').reverse('').join('');
+                }
+            }
+        })
+    </script>
+    <!-- 解读： 
+    通过Vue实例的methods借口，我们在模板中调用reversedMessage函数同样实现需求
+    methods与computed方法的区别在于：computed的数据依赖于obj11.message,只需message未变，则访问ReverseMessage计算属性将立即返回之前的计算结果，而methods则每次重新渲染时总是执行函数
+    如果有缓存需要，使用computed方法，否则使用methods代替 -->
+
+    <p>计算属性的setter</p>
+    <!-- Vue实例的computed对象默认只有getter，如果你要设置数据，可以提供一个setter，即设置器； -->
+    <div id="obj-12">
+        <p>Hi, I'm {{ fullName }}</p>
+    </div>
+    <script>
+        var obj12 = new Vue({
+            el : '#obj-12',
+            data : {
+                message : 'hello world!',
+                name : 'Teren'
+            },
+            computed : {
+                fullName : {
+                    get : function(){
+                        return this.name;
+                    },
+                    set : function(value){
+                        this.name = value
+                    }
+                }
+            }
+        })
+    </script>
+
+
+    <h1>Class与Style的绑定</h1>
+    <P>#绑定Class</P>
+    <div id="obj-13">
+        <!-- 直接绑定对象的内容 -->
+        <p class="static" v-bind:class="{active:isActive, error:hasError}">Hello World!</p>
+        <!-- 绑定对象 -->
+        <p v-bind:class="classObj">こんにちは</p>
+        <p v-bind:class="style">你好</p>
+        <!-- 绑定数组 -->
+        <p v-bind:class="[staticClass, activeClass, errorClass]">Olá</p>
+        <button v-on:click="changeColor">clicke me</button>
+    </div>
+    <script>
+        var obj13 = new Vue({
+            el : '#obj-13',
+            data : {
+                isActive:true,
+                hasError : true,
+                classObj : {
+                    static : true,
+                    active : true,
+                    error : true
+                },
+                staticClass : 'static',
+                activeClass : 'active',
+                errorClass : 'error'
+            },
+            computed : {
+                style : function(){
+                    return {
+                        active : this.isActive,
+                        static: true,
+                        error: this.hasError
+                    }
+                }
+            },
+            methods : {
+                changeColor:function(){
+                    this.isActive = !this.isActive;
+                }
+            }
+        })
+    </script>
+    <!-- 解读：
+    通过v-bind:class="{}"或v-bind:class=[]方式为模板绑定class
+    通过v-bind:class="{active:isActive,error:hasError}"绑定class，首先要在css中设置.active和,error，然后在Vue实例的data对象中设置isActive和hasError的布尔值；也可以直接传一个对象给class,即v-bind:class="classObj，再在data对象上直接赋值: -->
+
+    <p>#绑定style</p>
+    <div id="obj-14">
+        <p v-bind:style='styleObj'>Hello World!</p>
+        <p v-bind:style='[styleObj,bgObj]'>你好</p>
+    </div>
+    <script>
+        var obj14 = new Vue({
+            el : '#obj-14',
+            data : {
+                styleObj : {
+                    fontWeight: 800,
+                    color:'red'
+                },
+                bgObj:{
+                    width:'100px',
+                    height:'80px',
+                    background:'#ccc'
+                }
+            }
+        })
+    </script>
+    <!-- 解读:
+    绑定style到模板的方法有两种，一是v-bind:style="styleObj"，然后在data对象上定义styleObj;而是可以通过数组方式为style传入多个样式对象 -->
+
+
+    <h1>条件渲染和列表渲染</h1>
+    <p>前面简单介绍了一下v-if、v-for和v-on指令，下面的部分将详细介绍以上3个指令；</p>
+    <p>#条件渲染</p>
+    <div id="obj-15">
+        <p v-if="ok">Hello World!</p>
+        <p v-else>Hello Universal</p>
+        <template v-if='motto'>
+            <h4>Steve Jobs</h4>
+            <p>motto: stay hungry ! stay foolish</p>
+        </template>
+        <p v-show="ok">Show Me</p>
+    </div>
+    <script>
+        var obj15 = new Vue({
+            el : '#obj-15',
+            data : {
+                ok : true,
+                motto : true 
+            }
+        })
+    </script>
+    <!-- 解读：
+    通过v-if和v-else指令实现条件渲染，其中v-if="value"的value
+    要在data对象中赋布尔值，v-if支持<template>语法
+    v-show="value"是另一种条件渲染的方法； -->
+    <!-- 【TIP】 v-if和v-show的区别
+    v-if是真实的条件渲染，当进行条件切换时，它会销毁和重建条件块的内容，并且它支持<template>语法；
+    v-show的条件切换时基于css的display属性，所以不会销毁和重建条件块的内容；
+    当你频繁需要切换条件时，推荐使用v-show；否则使用v-if； -->
+
+    <p>#列表渲染</p>
+    <div id="obj-16">
+        <ol>
+            <li v-for='car in cars'>{{ car.name }}</li>
+        </ol>
+        <ul>
+            <li v-for='(food, index) in foods'>{{ index }} --- {{ food }} --- {{ delicious }}</li>
+        </ul>
+        <ul>
+            <li v-for='(value, key, index) in object'>{{index}}.{{key}}.{{value}}</li>
+        </ul>
+        <span v-for='n in 10' style="margin-left:5px">{{ n }}</span><br/>
+        <span v-for='n in evenNumbers' style="margin-left:5px">{{ n }}</span><br/>
+        <span v-for='n in oddNumbers' style="margin-left:5px">{{ n }}</span><br/>
+    </div>
+    <script>
+        var obj16 = new Vue({
+            el : '#obj-16',
+            data :{
+                delicious : 'delicious',
+                cars : [
+                    {name : 'Benz'},
+                    {name : 'BMW'}
+                ],
+                foods : [
+                    'tomato','potato','ice cream'
+                ],
+                object : {
+                    name : 'Jack',
+                    age: '18'
+                },
+                numbers : [1,2,3,4,5,6,7,8,9],
+                counts : [1,2,3,4,5]                
+            },
+            computed: {
+                evenNumbers : function(){
+                    return this.numbers.filter(function(number){
+                        return number%2 === 0;
+                    })
+                }
+            },
+            methods : {
+                oddNumbers:function(counts){
+                    return counts.filter(function(count){
+                        return count%2 === 1;
+                    })
+                }
+            }
+        })
+    </script>
+    <!-- 在 v-for块中，我们拥有对父作用域属性的完全访问权限；   -->
+
+
+    <h1>事件监听</h1>
+    <p>#简单的事件监听——直接在指令上处理数据</p>
+    <div id="obj-17">
+        <p v-on:click="counter += 1">{{ counter }}</p>
+    </div>
+    <script>
+        var obj17 = new Vue({
+            el : '#obj-17',
+            data : {
+                counter : 0 ,
+            }
+        })
+    </script>
+    <p>#复杂的事件监听——在methods对象定义回调函数</p>
+    <div id="obj-18">
+        <p v-on:click="great">{{vue}}</p>
+    </div>
+    <script>
+        var obj18 = new Vue({
+            el : '#obj-18',
+            data : {
+                vue : 'Hello Vue.js!'
+            },
+            methods : {
+                // event可有可无
+                great : function(event){
+                    console.log(this.vue)
+                }
+            }
+        })
+    </script>
+    <p>#事件修饰符——调用事件对象函数的快捷方式</p>
+    <!-- 等价于event.preventDefault() -->
+    <div v-on:click.prevent="greet">阻止默认事件发生，例如：a标签默认会刷新，表单的提交。</div>
+    <!-- 等价于event.stopPropagation -->
+    <div v-on:click.stop="greet">终止事件在传播过程的捕获、目标处理或起泡阶段进一步传播。调用该方法后，该节点上处理该事件的处理程序将被调用，事件不再被分派到其他节点。即不会再产生捕获和冒泡事件。 </div>
+    <!-- 等价于事件回调函数采用捕获阶段监听事件 -->
+    <div v-on:click.capture="greet">添加事件监听器时使用事件捕获模式，即在捕获模式下触发 </div>
+    <!-- 等价于event.target -->
+    <div v-on:click.self="greet">当前元素自身时触发处理函数时才会触发函数，原理：是根据event.target确定是否当前元素本身，来决定是否触发的事件/函数 </div>
+    <!-- 只触发一次 -->
+    <div v-on:click.once="greet">只触发一次</div>
+    <P>例子：</P>
+    <div id="obj-19">
+        <button v-on:click="gett">点击</button>
+        <input type="text" v-on:keyup.13="gett" value='name'/>
+        <div v-on:click="gett">外部点击
+            <div v-on:click.stop="tz">内部点击</div>
+        </div>
+        <a href="" v-on:click.prevent>dsfs</a>
+        <div v-on:click.selef="gett">外部点击1
+            <div v-on:click.capture="gett">外部点击2</div>
+        </div>
+        <div v-on:click.capture="gett">外部点击5
+            <div v-on:click="tz">内部点击5
+                <div v-on:click="set">点击6</div>
+            </div>
+        </div>
+        <div v-on:click.once="tz">once</div>
+    </div>
+    <div id="a">外部点击3
+        <div id="b">内部点击4</div>
+    </div>
+    <!-- <script>
+        mui.init();
+    </script> -->
+    <script type="application/javascript">
+        var obj19 = new Vue({
+            el : '#obj-19',
+            data : {
+                name : "张三"
+            },
+            methods : {
+                gett : function(e){
+                    console.log('111');
+                    console.log(e.target);
+                    this.name="李四";
+                },
+                tz : function(e){
+                    console.log(e.target);
+                    console.log('222');
+                },
+                set:function(e){
+                    console.log(e.target);
+                    console.log('333');
+                }
+            }
+        })
+        document.getElementById('a').addEventListener('click',function(e){
+            console.log(e.target);
+            alert('aaaa')
+        },true);
+        document.getElementById('b').addEventListener('click',function(e){
+            console.log(e.target);
+            alert('bbbb')
+        },true);
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

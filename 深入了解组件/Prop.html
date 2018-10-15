@@ -220,8 +220,21 @@
         </script>
         <p>有了 inheritAttrs: false 和 $attrs，你就可以手动决定这些特性会被赋予哪个元素。在撰写基础组件的时候是常会用到的：</p>
         <script>
+            Vue.component('base-input',{
+                inheritAttrs : false ,
+                props : ['label', 'value'],
+                template : '<label> {{ label }} <input v-bind="$attrs" v-bind:value="value" v-on:input="$emit(\'input\', $event.target.value)" /> </label>'
+            })
         </script>
-        <p></p>
+        <p>这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：</p>
+        <div id="base-input">
+        <base-input v-model="username" class="username-input" placeholder="Enter your username"></base-input>
+        </div>
+        <script>
+            new Vue({
+                el : '#base-input'
+            })
+        </script>
         <p></p>
 
 </body>

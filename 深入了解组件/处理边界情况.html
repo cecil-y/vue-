@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>处理边界情况</title>
+    <script src="../VueJS/vue.js"></script>
+</head>
+
+<body>
+    <h1>访问元素&组件</h1>
+    <p>在绝大多数情况下，我们最好不要触达另一个组件实例内部或手动操作 DOM 元素。不过也确实在一些情况下做这些事情是合适的。</p>
+        <h2>访问根实例</h2>
+        <p>在每个 new Vue 实例的子组件中，其根实例可以通过 $root 属性进行访问。例如，在这个根实例中：</p>
+        <script>
+            new Vue({
+                data : {
+                    foo : 1
+                },
+                computed : {
+                    bar :function(){
+
+                    }
+                },
+                methods : {
+                    baz : function(){
+
+                    }
+                }
+            })
+        </script>
+        <p>所有的子组件都可以将这个实例作为一个全局 store 来访问或使用。</p>
+        <p>获取根组件的数据：this.$root.foo</p>
+        <p>写入根组件的数据：this.$root.foo = 2</p>
+        <p>访问根组件的计算属性：this.$root.bar</p>
+        <p>调用根组件的方法：this.$root.baz()</p>
+        <p>对于 demo 或非常小型的有少量组件的应用来说这是很方便的。不过这个模式扩展到中大型应用来说就不然了。因此在绝大多数情况下，我们强烈推荐使用 Vuex 来管理应用的状态。</p>
+
+        <h2>访问父级组件实例</h2>
+        <p>和 $root 类似，$parent 属性可以用来从一个子组件访问父组件的实例。它提供了一种机会，可以在后期随时触达父级组件，以替代将数据以 prop 的方式传入子组件的方式。</p>
+        <p>在绝大多数情况下，触达父级组件会使得你的应用更难调试和理解，尤其是当你变更了父级组件的数据的时候。当我们稍后回看那个组件的时候，很难找出那个变更是从哪里发起的。</p>
+        <p>另外在一些可能适当的时候，你需要特别地共享一些组件库。举个例子，在和 JavaScript API 进行交互而不渲染 HTML 的抽象组件内，诸如这些假设性的 Google 地图组件一样：</p>
+        <google-map>
+            <google-map-markers v-bind:places="iceCreamShops"></google-map-markers>
+        </google-map>
+        <p>这个 &lt;google-map&gt; 组件可以定义一个 map 属性，所有的子组件都需要访问它。在这种情况下 &lt;google-map-markers&gt; 可能想要通过类似 this.$parent.getMap 的方式访问那个地图，以便为其添加一组标记。你可以在这里查阅这种模式。</p>
+        <p>请留意，尽管如此，通过这种模式构建出来的那个组件的内部仍然是容易出现问题的。比如，设想一下我们添加一个新的 &lt;google-map-region&gt; 组件，当 &lt;google-map-markers&gt; 在其内部出现的时候，只会渲染那个区域内的标记：</p>
+        <p>那么在 &lt;google-map-markers&gt; 内部你可能发现自己需要一些类似这样的 hack：</p>
+        <p>var map = this.$parent.map || this.$parent.$parent.map</p>
+        <p>很快它就会失控。这也是我们针对需要向任意更深层级的组件提供上下文信息时推荐依赖注入的原因。</p>
+
+        <h2>访问子组件实例或元素</h2>
+
+        <h2>依赖注入</h2>
+
+    <h1>程序化的事件监听器</h1>
+    <h1>循环引用</h1>
+    <h1>模板定义的替代品</h1>
+    <h1>控制更新</h1>
+</body>
+
+</html>
