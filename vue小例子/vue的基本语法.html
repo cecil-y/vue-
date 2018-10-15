@@ -450,6 +450,7 @@
             }
         })
     </script>
+
     <p>#复杂的事件监听——在methods对象定义回调函数</p>
     <div id="obj-18">
         <p v-on:click="great">{{vue}}</p>
@@ -468,7 +469,8 @@
             }
         })
     </script>
-    <p>#事件修饰符——调用事件对象函数的快捷方式</p>
+
+    <p style="color:red">#事件修饰符——调用事件对象函数的快捷方式</p>
     <!-- 等价于event.preventDefault() -->
     <div v-on:click.prevent="greet">阻止默认事件发生，例如：a标签默认会刷新，表单的提交。</div>
     <!-- 等价于event.stopPropagation -->
@@ -478,9 +480,9 @@
     <!-- 等价于event.target -->
     <div v-on:click.self="greet">当前元素自身时触发处理函数时才会触发函数，原理：是根据event.target确定是否当前元素本身，来决定是否触发的事件/函数 </div>
     <!-- 只触发一次 -->
-    <div v-on:click.once="greet">只触发一次</div>
+    <div v-on:click.once="greet" >只触发一次</div>
     <P>例子：</P>
-    <div id="obj-19">
+    <div id="obj-19" style="background-color:gray">
         <button v-on:click="gett">点击</button>
         <input type="text" v-on:keyup.13="gett" value='name'/>
         <div v-on:click="gett">外部点击
@@ -535,11 +537,101 @@
         },true);
     </script>
 
+    <p>#按键修饰符——按键事件的快捷方式</p>
+    <ul>常见按键别名包括：
+        <li>enter</li>
+        <li>tab</li>
+        <li>delete</li>
+        <li>esc</li>
+        <li>space</li>
+        <li>up</li>
+        <li>down</li>
+        <li>left</li>
+        <li>right</li>
+    </ul>
+    <p>例子：</p>
+    <div id="obj-20" style="text-align:enter;width:200px;height:80px;background:#ccc;" >
+        <div v-on:click='counter += 1'>{{ counter }}</div>
+        <div v-on:click='greet'>{{ vue }}</div>
+        <a href="#" v-on:click.prevent.stop.capture.self>hello world</a>
+        <input type="text" v-on:keydown.enter='hello'>
+    </div>
+    <script>
+        var obj20 = new Vue({
+            el : '#obj-20',
+            data : {
+                counter : 1,
+                vue: 'Vue.js'
+            },
+            methods : {
+                greet : function(event){
+                    console.log('hello'+this.vue);
+                },
+                hello:function(event){
+                    console.log(event.target.tagName)
+                }
+            }
+        })
+    </script>
 
 
+    <h2>表单控件绑定</h2>
+    <p>#文本控件</p>
+    <div id="obj-21">
+        <p> {{message}}</p>
+        <input type="text" v-model='message'>
+    </div>
+    <script>
+        var obj21 = new Vue({
+            el : '#obj-21',
+            data : {
+                message : 'Hello World!'
+            }
+        })
+    </script>
+    <!-- 解读：
+    通过v-model指令可以实现数据的双向绑定，即View层的数据变化可以直接改变Model层的数据，而Model层的数据改变也可以直接反映在View层；
+    上述代码v-model="message"使得input的value属性和message属性绑定，在输入框输入值，即改变value同时也改变message； -->
 
+    <p>#单选控件</p>
+    <div id="obj-22">
+        <input id="man" value="man" type="radio" v-model='picked'>
+        <label for="man">Man</label><br/>
+        <input id="woman" value="woman" type="radio" v-model='picked'>
+        <label for="woman">Woman</label>
+        <div style='margin-left:10px'>{{picked}}</div>
+    </div>
+    <script>
+        var obj22 = new Vue({
+            el : '#obj-22',
+            data : {
+                message : 'Hello World',
+                picked: 'no Sex'
+            }
+        })
+    </script>
+    <!-- 解读：
+    v-model指令绑定data对象的picked属性，该属性默认指向type='radio'的input的value； -->
 
-
+    <P>#复选框</P>
+    <div id="obj-23">
+        <input type="checkbox" id="Benz" v-model="checked" value="Benz"/>
+        <label for="Benz">Benz</label>
+        <input type="checkbox" id="BMW" v-model="checked" value="BMW">
+        <label for="BMW">BMW</label>
+        <div>Checked Name: {{ checked }}</div>
+    </div>
+    <script>
+        var obj23 = new Vue({
+            el : '#obj-23',
+            data : {
+                message : 'Hello World',
+                picked : 'No Name',
+                selected: 'A',
+                checked: []
+            }
+        })
+    </script>
 
 
 
