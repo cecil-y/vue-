@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vue基本语法</title>
 
-    <link rel="stylesheet" href="vue的基本语法.css" type="text/css"/>
+    <link rel="stylesheet" href="vue的基本语法.css" type="text/css" />
     <script src="../VueJS/vue.js"></script>
 </head>
 
@@ -54,10 +54,25 @@
     <!-- 如果想要获取到obj2这一实例中选项的对象，Vue提供$进行获取(在控制台输入)
     app.$el === document.getElementById('obj-2')//true
     app.$data.message // helol world -->
-    <!-- 注意：Vue实例所代理data对象上的属性只有在实例创建的同时进行初始化才具有响应式更新，若在实例创建之后添加是不会触发视图更新的 -->
+
+    <p>例一：</p>
+    <div id="eg-1">{{message}}&nbsp;&nbsp;<button v-on:click="sayHello">click me</button></div>
+    <script>
+        var eg1 = new Vue({
+            el: '#eg-1',
+            data: {
+                message: 'Hello World!',
+                sayHello: function () {
+                    console.log("sayHello");
+                }
+            }
+        })
+    </script>
+    <!-- [TIP]：Vue实例所代理data对象上的属性只有在实例创建的同时进行初始化才具有响应式更新，若在实例创建之后添加是不会触发视图更新的 -->
+
 
     <h1>数据绑定操作</h1>
-    <h2>#绑定文本和HTML</h2>
+    <p>#绑定文本和HTML</p>
     <div id="obj-3">
         {{msg}}
         <div v-html="hi"></div>
@@ -66,7 +81,7 @@
         var obj3 = new Vue({
             el: '#obj-3',
             data: {
-                msg: 'hello world!',
+                msg: '<h4>hi</h4>',
                 hi: '<h4>hi</h4>'
             }
         })
@@ -76,7 +91,7 @@
         JS部分的语法可以从jQuery角度去理解，相当于创建一个Vue实例，这个实例指向#app，并在Vue提供的固定接口data上定义Vue实例的属性；
         使用{{message}}的mustache语法只能将数据解释为纯文本，为了输出HTML，可以使用v-html指令； -->
 
-    <h2>#绑定数据在元素的属性</h2>
+    <p>#绑定数据在元素的属性</p>
     <div id="obj-4" v-bind:title='message' v-bind:style='red' v-once>
         {{message}}
     </div>
@@ -94,7 +109,33 @@
         绑定数据到节点属性上时，需要使用v-bind指令，这个元素节点的 title属性和 Vue 实例的 message属性绑定到一起，从而建立数据与该属性值的绑定，也可以使用v-bind:href="url"的缩写方式:href="url"；
         v-once指令能够让你执行一次性的插值，当数据改变时，插值处的内容不会更新； -->
 
-    <h2>#使用JS表达式处理数据</h2>
+    <p>例二：</p>
+    <div id="eg-2">
+        <p v-once v-bind:style='red' v-html='hi'></p>
+        <p v-if='seen' :title="title">{{message}}</p>
+        <ol>
+            <li v-for='item in items'>{{item.text}}</li>
+        </ol>
+    </div>
+    <script>
+        var eg2 = new Vue({
+            el: '#eg-2',
+            data: {
+                red: 'color:red',
+                hi: '<h4>hi</h4>',
+                title: 'Hi',
+                message: 'hello world',
+                seen: true,
+                items: [
+                    { text: 'Vue' },
+                    { text: 'React' },
+                    { text: 'Angular' }
+                ]
+            }
+        })
+    </script>
+
+    <p>#使用JS表达式处理数据</p>
     <div id="obj-5">
         <p v-once>{{ num + 10}}</p>
         <p v-if='seen'>{{ message + ' jirengu' }}</p>
@@ -110,7 +151,31 @@
         })
     </script>
 
-    <h2>#使用过滤器来格式化数据</h2>
+    <p>例三：</p>
+    <div id='eg-3'>
+        <p v-once>{{num + 10}}</p>
+        <p v-if="seen">{{message + '例子'}}</p>
+        <ol>
+            <li v-for='item in items'>{{item.text}}</li>
+        </ol>
+    </div>
+    <script>
+        var eg3 = new Vue({
+            el: '#eg-3',
+            data: {
+                num: 10,
+                message: 'hello world',
+                seen: true,
+                items: [
+                    { text: 'Java' },
+                    { text: 'C++' },
+                    { text: 'PHP' }
+                ]
+            }
+        })
+    </script>
+
+    <p>#使用过滤器来格式化数据</p>
     <div id="obj-6">
         <p v-if="seen">{{ message | capitalize }}</p>
     </div>
@@ -132,7 +197,28 @@
     </script>
     <!-- 输出结果，h变成H，然后拼接value.slice(1) -->
 
-    <h2>#条件指令控制DOM元素的显示操作</h2>
+    <p>例四：</p>
+    <div id="eg-4">
+        <p v-if="seen">{{message | capitalize}}</p>
+    </div>
+    <script>
+        var eg4 = new Vue({
+            el: '#eg-4',
+            data: {
+                message: 'hello world',
+                seen: true
+            },
+            filters: {
+                capitalize: function (value) {
+                    if (!value) return '';
+                    value = value.toString();
+                    return value.charAt(0).toUpperCase() + value.slice(1);
+                }
+            }
+        })
+    </script>
+
+    <p>#条件指令控制DOM元素的显示操作</p>
     <div id="obj-7">
         <p v-if='seen'>{{message}}</p>
     </div>
@@ -148,7 +234,7 @@
     <!-- 解读：
         v-if指令可以绑定一个属性值为布尔型的属性，当值为真时，元素将显示，反之则消失； -->
 
-    <h2>#循环指令实现数据的遍历</h2>
+    <p>#循环指令实现数据的遍历</p>
     <div id="obj-8">
         <ol>
             <li v-for='item in items'>{{ item.text }}</li>
@@ -169,7 +255,7 @@
     <!-- 解读：
         v-for可以绑定数组型数据进行绑定，并使用item in items形式，从而数据的遍历操作； -->
 
-    <h2>#事件绑定指令可以实现事件监听</h2>
+    <p>#事件绑定指令可以实现事件监听</p>
     <div id="obj-9">
         <p>{{ message }}</p>
         <button v-on:click='reverseMessage'>reverseMessage</button>
@@ -263,17 +349,17 @@
     </div>
     <script>
         var obj12 = new Vue({
-            el : '#obj-12',
-            data : {
-                message : 'hello world!',
-                name : 'Teren'
+            el: '#obj-12',
+            data: {
+                message: 'hello world!',
+                name: 'Teren'
             },
-            computed : {
-                fullName : {
-                    get : function(){
+            computed: {
+                fullName: {
+                    get: function () {
                         return this.name;
                     },
-                    set : function(value){
+                    set: function (value) {
                         this.name = value
                     }
                 }
@@ -296,30 +382,30 @@
     </div>
     <script>
         var obj13 = new Vue({
-            el : '#obj-13',
-            data : {
-                isActive:true,
-                hasError : true,
-                classObj : {
-                    static : true,
-                    active : true,
-                    error : true
+            el: '#obj-13',
+            data: {
+                isActive: true,
+                hasError: true,
+                classObj: {
+                    static: true,
+                    active: true,
+                    error: true
                 },
-                staticClass : 'static',
-                activeClass : 'active',
-                errorClass : 'error'
+                staticClass: 'static',
+                activeClass: 'active',
+                errorClass: 'error'
             },
-            computed : {
-                style : function(){
+            computed: {
+                style: function () {
                     return {
-                        active : this.isActive,
+                        active: this.isActive,
                         static: true,
                         error: this.hasError
                     }
                 }
             },
-            methods : {
-                changeColor:function(){
+            methods: {
+                changeColor: function () {
                     this.isActive = !this.isActive;
                 }
             }
@@ -336,16 +422,16 @@
     </div>
     <script>
         var obj14 = new Vue({
-            el : '#obj-14',
-            data : {
-                styleObj : {
+            el: '#obj-14',
+            data: {
+                styleObj: {
                     fontWeight: 800,
-                    color:'red'
+                    color: 'red'
                 },
-                bgObj:{
-                    width:'100px',
-                    height:'80px',
-                    background:'#ccc'
+                bgObj: {
+                    width: '100px',
+                    height: '80px',
+                    background: '#ccc'
                 }
             }
         })
@@ -368,10 +454,10 @@
     </div>
     <script>
         var obj15 = new Vue({
-            el : '#obj-15',
-            data : {
-                ok : true,
-                motto : true 
+            el: '#obj-15',
+            data: {
+                ok: true,
+                motto: true
             }
         })
     </script>
@@ -395,40 +481,40 @@
         <ul>
             <li v-for='(value, key, index) in object'>{{index}}.{{key}}.{{value}}</li>
         </ul>
-        <span v-for='n in 10' style="margin-left:5px">{{ n }}</span><br/>
-        <span v-for='n in evenNumbers' style="margin-left:5px">{{ n }}</span><br/>
-        <span v-for='n in oddNumbers' style="margin-left:5px">{{ n }}</span><br/>
+        <span v-for='n in 10' style="margin-left:5px">{{ n }}</span><br />
+        <span v-for='n in evenNumbers' style="margin-left:5px">{{ n }}</span><br />
+        <span v-for='n in oddNumbers' style="margin-left:5px">{{ n }}</span><br />
     </div>
     <script>
         var obj16 = new Vue({
-            el : '#obj-16',
-            data :{
-                delicious : 'delicious',
-                cars : [
-                    {name : 'Benz'},
-                    {name : 'BMW'}
+            el: '#obj-16',
+            data: {
+                delicious: 'delicious',
+                cars: [
+                    { name: 'Benz' },
+                    { name: 'BMW' }
                 ],
-                foods : [
-                    'tomato','potato','ice cream'
+                foods: [
+                    'tomato', 'potato', 'ice cream'
                 ],
-                object : {
-                    name : 'Jack',
+                object: {
+                    name: 'Jack',
                     age: '18'
                 },
-                numbers : [1,2,3,4,5,6,7,8,9],
-                counts : [1,2,3,4,5]                
+                numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                counts: [1, 2, 3, 4, 5]
             },
             computed: {
-                evenNumbers : function(){
-                    return this.numbers.filter(function(number){
-                        return number%2 === 0;
+                evenNumbers: function () {
+                    return this.numbers.filter(function (number) {
+                        return number % 2 === 0;
                     })
                 }
             },
-            methods : {
-                oddNumbers:function(counts){
-                    return counts.filter(function(count){
-                        return count%2 === 1;
+            methods: {
+                oddNumbers: function (counts) {
+                    return counts.filter(function (count) {
+                        return count % 2 === 1;
                     })
                 }
             }
@@ -444,9 +530,9 @@
     </div>
     <script>
         var obj17 = new Vue({
-            el : '#obj-17',
-            data : {
-                counter : 0 ,
+            el: '#obj-17',
+            data: {
+                counter: 0,
             }
         })
     </script>
@@ -457,13 +543,13 @@
     </div>
     <script>
         var obj18 = new Vue({
-            el : '#obj-18',
-            data : {
-                vue : 'Hello Vue.js!'
+            el: '#obj-18',
+            data: {
+                vue: 'Hello Vue.js!'
             },
-            methods : {
+            methods: {
                 // event可有可无
-                great : function(event){
+                great: function (event) {
                     console.log(this.vue)
                 }
             }
@@ -474,30 +560,31 @@
     <!-- 等价于event.preventDefault() -->
     <div v-on:click.prevent="greet">阻止默认事件发生，例如：a标签默认会刷新，表单的提交。</div>
     <!-- 等价于event.stopPropagation -->
-    <div v-on:click.stop="greet">终止事件在传播过程的捕获、目标处理或起泡阶段进一步传播。调用该方法后，该节点上处理该事件的处理程序将被调用，事件不再被分派到其他节点。即不会再产生捕获和冒泡事件。 </div>
+    <div v-on:click.stop="greet">终止事件在传播过程的捕获、目标处理或起泡阶段进一步传播。调用该方法后，该节点上处理该事件的处理程序将被调用，事件不再被分派到其他节点。即不会再产生捕获和冒泡事件。
+    </div>
     <!-- 等价于事件回调函数采用捕获阶段监听事件 -->
     <div v-on:click.capture="greet">添加事件监听器时使用事件捕获模式，即在捕获模式下触发 </div>
     <!-- 等价于event.target -->
     <div v-on:click.self="greet">当前元素自身时触发处理函数时才会触发函数，原理：是根据event.target确定是否当前元素本身，来决定是否触发的事件/函数 </div>
     <!-- 只触发一次 -->
-    <div v-on:click.once="greet" >只触发一次</div>
+    <div v-on:click.once="greet">只触发一次</div>
     <P>例子：</P>
     <div id="obj-19" style="background-color:gray">
-        <button v-on:click="gett">点击</button>
-        <input type="text" v-on:keyup.13="gett" value='name'/>
-        <div v-on:click="gett">外部点击
-            <div v-on:click.stop="tz">内部点击</div>
+        <button v-on:click="click1">点击1</button>
+        <input type="text" v-on:keyup.13="input" value='name' />
+        <div v-on:click="click2">外部点击2
+            <div v-on:click.stop="click3">内部点击3[.stop修饰]</div>
         </div>
-        <a href="" v-on:click.prevent>dsfs</a>
-        <div v-on:click.selef="gett">外部点击1
-            <div v-on:click.capture="gett">外部点击2</div>
+        <a href="www.baidu.com" v-on:click.prevent>超链接</a>
+        <div v-on:click.self="click4">外部点击4[.self修饰符]
+            <div v-on:click.capture="click5">外部点击5[.capture修饰符]</div>
         </div>
-        <div v-on:click.capture="gett">外部点击5
-            <div v-on:click="tz">内部点击5
-                <div v-on:click="set">点击6</div>
+        <div v-on:click.capture="click6">外部点击6[.capture修饰符]
+            <div v-on:click="click7">内部点击7
+                <div v-on:click="click8">点击2</div>
             </div>
         </div>
-        <div v-on:click.once="tz">once</div>
+        <div v-on:click.once="once">once</div>
     </div>
     <div id="a">外部点击3
         <div id="b">内部点击4</div>
@@ -507,34 +594,51 @@
     </script> -->
     <script type="application/javascript">
         var obj19 = new Vue({
-            el : '#obj-19',
-            data : {
-                name : "张三"
+            el: '#obj-19',
+            data: {
+                name: "张三"
             },
-            methods : {
-                gett : function(e){
-                    console.log('111');
-                    console.log(e.target);
-                    this.name="李四";
+            methods: {
+                click1: function (e) {
+                    console.log('点击1');
                 },
-                tz : function(e){
-                    console.log(e.target);
-                    console.log('222');
+                input: function (e) {
+                    console.log('input输入框')
                 },
-                set:function(e){
-                    console.log(e.target);
-                    console.log('333');
+                click2: function (e) {
+                    console.log('外部点击2');
+                },
+                click3: function (e) {
+                    console.log('内部点击3');
+                },
+                click4: function (e) {
+                    console.log('外部点击4');
+                },
+                click5: function (e) {
+                    console.log('外部点击5');
+                },
+                click6: function (e) {
+                    console.log('外部点击6');
+                },
+                click7: function (e) {
+                    console.log('外部点击7');
+                },
+                click8: function (e) {
+                    console.log('点击2');
+                },
+                once: function (e) {
+                    console.log('once修饰符')
                 }
             }
         })
-        document.getElementById('a').addEventListener('click',function(e){
+        document.getElementById('a').addEventListener('click', function (e) {
             console.log(e.target);
             alert('aaaa')
-        },true);
-        document.getElementById('b').addEventListener('click',function(e){
+        }, true);
+        document.getElementById('b').addEventListener('click', function (e) {
             console.log(e.target);
             alert('bbbb')
-        },true);
+        }, true);
     </script>
 
     <p>#按键修饰符——按键事件的快捷方式</p>
@@ -550,7 +654,7 @@
         <li>right</li>
     </ul>
     <p>例子：</p>
-    <div id="obj-20" style="text-align:enter;width:200px;height:80px;background:#ccc;" >
+    <div id="obj-20" style="text-align:enter;width:200px;height:80px;background:#ccc;">
         <div v-on:click='counter += 1'>{{ counter }}</div>
         <div v-on:click='greet'>{{ vue }}</div>
         <a href="#" v-on:click.prevent.stop.capture.self>hello world</a>
@@ -558,16 +662,16 @@
     </div>
     <script>
         var obj20 = new Vue({
-            el : '#obj-20',
-            data : {
-                counter : 1,
+            el: '#obj-20',
+            data: {
+                counter: 1,
                 vue: 'Vue.js'
             },
-            methods : {
-                greet : function(event){
-                    console.log('hello'+this.vue);
+            methods: {
+                greet: function (event) {
+                    console.log('hello' + this.vue);
                 },
-                hello:function(event){
+                hello: function (event) {
                     console.log(event.target.tagName)
                 }
             }
@@ -583,9 +687,9 @@
     </div>
     <script>
         var obj21 = new Vue({
-            el : '#obj-21',
-            data : {
-                message : 'Hello World!'
+            el: '#obj-21',
+            data: {
+                message: 'Hello World!'
             }
         })
     </script>
@@ -596,16 +700,16 @@
     <p>#单选控件</p>
     <div id="obj-22">
         <input id="man" value="man" type="radio" v-model='picked'>
-        <label for="man">Man</label><br/>
+        <label for="man">Man</label><br />
         <input id="woman" value="woman" type="radio" v-model='picked'>
         <label for="woman">Woman</label>
         <div style='margin-left:10px'>{{picked}}</div>
     </div>
     <script>
         var obj22 = new Vue({
-            el : '#obj-22',
-            data : {
-                message : 'Hello World',
+            el: '#obj-22',
+            data: {
+                message: 'Hello World',
                 picked: 'no Sex'
             }
         })
@@ -615,7 +719,7 @@
 
     <P>#复选框</P>
     <div id="obj-23">
-        <input type="checkbox" id="Benz" v-model="checked" value="Benz"/>
+        <input type="checkbox" id="Benz" v-model="checked" value="Benz" />
         <label for="Benz">Benz</label>
         <input type="checkbox" id="BMW" v-model="checked" value="BMW">
         <label for="BMW">BMW</label>
@@ -623,10 +727,10 @@
     </div>
     <script>
         var obj23 = new Vue({
-            el : '#obj-23',
-            data : {
-                message : 'Hello World',
-                picked : 'No Name',
+            el: '#obj-23',
+            data: {
+                message: 'Hello World',
+                picked: 'No Name',
                 selected: 'A',
                 checked: []
             }
@@ -634,13 +738,376 @@
     </script>
 
 
+    <h1>组件</h1>
+    <p>组件可以扩展 HTML 元素，封装可重用的代码。在较高层面上，组件是自定义元素;
+        通过Vue.component()接口将大型应用拆分为各个组件，从而使代码更好具有维护性、复用性以及可读性</p>
+    <p>#注册组件</p>
+    <div id="obj-24">
+        <my-component></my-component>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<div>my-first-component</div>'
+        })
+        var obj24 = new Vue({
+            el: '#obj-24',
+            data: {
+
+            }
+        })
+    </script>
+    <!-- 解读：
+    注册行为必须在创建实例之前；
+    component的template接口定义组件的html元素； -->
+
+    <p>#局部注册组件</p>
+    <div id="obj-25">
+        <my-component>
+            <heading></heading>
+        </my-component>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<div>my-first-component</div>'
+        })
+        var Child = {
+            template: '<h4> Hello World!</h4>'
+        }
+        var obj25 = new Vue({
+            el: '#obj-25',
+            components: {
+                'my-component': Child
+            }
+        })
+    </script>
+    <!-- 解读：
+    可以定义一个子组件，在实例的components接口中将子组件挂载到父组件上，子组件只在父组件的作用域下有效； -->
+
+    <!-- 特殊DOM模板将会限制组件的渲染
+    像这些包含固定样式的元素<ul>， <ol>， <table>， <select>，
+    自定义组件中使用这些受限制的元素时会导致渲染失败；
+    通的方案是使用特殊的 is属性
+    <table>
+        <tr is="my-component"></tr>
+    </table> -->
+
+    <p>#创建组件的data对象必须是函数</p>
+    <div id="obj-26">
+        <counter></counter>
+        <counter></counter>
+        <counter></counter>
+    </div>
+    <script>
+        Vue.component('counter', {
+            template: '<button @click="count += 1">{{ count}} </button>',
+            data: function () {
+                return {
+                    count: 0
+                }
+            }
+        });
+        var obj26 = new Vue({
+            el: '#obj-26',
+        })
+    </script>
+    <!-- 解读：
+    在组件当中定义的数据count必须以函数的形式返回； -->
+
+    <p>#使用Props实现父组件向子组件传递数据</p>
+    <div id="obj-27">
+        <child some-text='hello'></child><br />
+        <child v-bind:some-text="message"></child>
+    </div>
+    <script>
+        Vue.component('child', {
+            template: '<div> {{someText}} </div>',
+            props: ['someText']
+        })
+        var obj27 = new Vue({
+            el: '#obj-27',
+            components: {
+                'my-component': Child
+            },
+            data: {
+                message: '你好'
+            }
+        })
+    </script>
+    <!-- 解读：
+    组件实例的作用域是孤立的。这意味着不能并且不应该在子组件的模板内直接引用父组件的数据。可以使用 props 把数据传给子组件；
+    可以用 v-bind动态绑定 props 的值到父组件的数据中。每当父组件的数据变化时，该变化也会传导给子组件，注意这种绑定方式是单向绑定； -->
+
+    <p>#父组件是使用props传递给子组件，但如果组件要把数据传递回去则使用自定义事件</p>
+    <div id="obj-28">
+        <p> {{total}}</p>
+        <button-counter v-on:increase="incrementTotal"></button-counter>
+        <button-counter @increase='incrementTotal'></button-counter>
+    </div>
+    <script>
+        Vue.component('button-counter', {
+            template: '<button v-on:click="increment">{{counter}}</button>',
+            data: function () {
+                return {
+                    counter: 0
+                }
+            },
+            methods: {
+                increment: function () {
+                    this.counter += 1;
+                    this.$emit('increase')
+                }
+            }
+        })
+        var obj28 = new Vue({
+            el: '#obj-28',
+            data: {
+                total: 0
+            },
+            methods: {
+                incrementTotal: function () {
+                    this.total += 1;
+                }
+            }
+        })
+    </script>
+    <!-- 解读：
+    父组件可以通过监听子组件的自定义事件，从而改变父组件的数据；
+    子组件每点击一次，触发increment函数，该函数在执行过程中通过$emit('increase')发出increase事件；
+    button控件同时监听increase事件，每次发出该事件就改变父组件的total值； -->
+
+    <p>#使用Slots分发内容</p>
+    <!-- 内容分发指的是混合父组件的内容与子组件自己的模板； -->
+    <div id="obj-29">
+        <h4>I'm the parent title</h4>
+        <my-component>
+            <p>This is some original content</p>
+            <p>This is some more original content</p>
+        </my-component>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<div> <h5>I\'m the child title</h5><slot>如果没有分发内容则显示我</slot></div>'
+        })
+        var obj29 = new Vue({
+            el: '#obj-29',
+            data: {
+
+            }
+        })
+    </script>
+    <!-- 解读：
+    如果子组件模板一个<slot>都不包含，则父组件内容将会被丢弃；
+    当子组件模板只有一个没有属性的 slot 时，父组件整个内容片段将插入到 slot 所在的 DOM 位置，并替换掉 slot 标签本身；
+    只有在宿主元素为空，且没有要插入的内容时才显示备用内容； -->
+
+    <!-- 子组件app-layout模板 -->
+    <!-- <div class="container">
+            <header>
+                <slot name="header"></slot>
+            </header>
+            <main>
+                <slot></slot>
+            </main>
+            <footer>
+                <slot name="footer"></slot>
+            </footer>
+        </div> -->
+    <!-- 父组件模板 -->
+    <!-- <app-layout>
+            <h4 slot="header">Here might be a page title</h4>
+            <p>A paragraph for the main content.</p>
+            <p>And another one.</p>
+            <p slot="footer">Here's some contact info</p>
+        </app-layout> -->
+    <!-- 渲染结果 -->
+    <!-- <div class="container">
+            <header>
+                <h4>Here might be a page title</h4>
+            </header>
+            <main>
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+            </main>
+            <footer>
+                <p>Here's some contact info</p>
+            </footer>
+        </div> -->
+
+    <!-- 解读： -->
+    <!-- 具名slot相当于给slot设置标识符，只要在父组件的元素上设置<div slot="name"></div>就可以把该元素插入子组件定义的模板； -->
+
+    <p>【TIP】关于组件的命名规范</p>
+    <P>当注册组件（或者 props）时，可以使用 kebab-case ，camelCase ，或 TitleCase --></P>
+    <p>#在组件定义中</p>
+    <p>components:{}</p>
+    <p>#使用camelCase形式注册</p>
+    <p>'kebab-cased-component':{...}</p>
+    <p>'camelCasedComponent':{...}</p>
+    <p>'TitleCasedComponent':{...}</p>
+    <p>#在HTML模板中，请使用kebab-case形式：</p>
+    <p style="color:red">为了记忆方便，建议统一使用kebab-case形式</p>
+
+
+    <h1>vue-resource插件</h1>
+    <!-- 使用vue-rescource实现前后端的通信
+    在vue实例中新增ready对象，当页面完成加载时发出请求 -->
+    <div id="obj-30">
+        <!-- 。。。 -->
+    </div>
+    <script>
+        new Vue({
+            el: '#obj-30',
+            ready: function () {
+                this.$http.get('book.json', function (data) {
+                    this.$set('books', data);
+                }).error(function (data, status, request) {
+                    console.log('fail' + status + "," + request);
+                })
+                //post方法：this.$http.post(url, postdata, function callback)
+            },
+            data: {
+                books: ''
+            }
+        })
+    </script>
+    <!-- 【TIP】
+    这个$http请求和jquery的ajax还是有点区别，这里的post的data默认不是以form data的形式，而是request payload。解决起来也很简单：在vue实例中添加headers字段:
+    http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} } -->
 
 
 
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" />
+    <h1>小表格</h1>
+    <div class='container'>
+        <div class='col-md-6 col-md-offset-3'>
+            <h2>Hello Vue.js!</h2>
+            <div id='app'>
+                <table class='table table-hover' v-cloak>
+                    <thead>
+                        <tr>
+                            <th class="text-right" @click='sortBy("id")'>序号</th>
+                            <th class="text-right" @click='sortBy("name")'>书名</th>
+                            <th class="text-right" @click='sortBy("author")'>作者</th>
+                            <th class="text-right" @click='sortBy("price")'>价格</th>
+                            <th class="text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for='book in books'>
+                            <td class='text-right'>{{book.id}}</td>
+                            <td class='text-right'>{{book.name}}</td>
+                            <td class='text-right'>{{book.author}}</td>
+                            <td class='text-right'>{{book.price}}</td>
+                            <template v-if='book.id%2 == 0'>
+                                <td class='text-right'>
+                                    <button type='button' class='btn btn-success' @click='delBook(book)'>删除</button>
+                                </td>
+                            </template>
+                            <template v-else>
+                                <td class='text-right'>
+                                    <button type='button' class='btn btn-danger' @click='delBook(book)'>删除</button>
+                                </td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td class='text-right' colspan='5'>
+                                <h4>总价：{{sum}}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id='add-book'>
+                    <legend>添加书籍</legend>
+                    <div class='from-group'>
+                        <label>书名</label>
+                        <input type='text' class='form-control' v-model='book.name'>
+                    </div>
+                    <div class='form-group'>
+                        <label>作者</label>
+                        <input type='text' class='form-control' v-model='book.author'>
+                    </div>
+                    <div class='form-group'>
+                        <label>价格</label>
+                        <input type='text' class='form-control' v-model='book.price'>
+                    </div>
+                    <button class='btn btn-primary btn-block' @click='addBook()'>添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                sortparam: '',
+                book: {
+                    id: 0,
+                    author: '',
+                    name: '',
+                    price: ''
+                },
+                books: [{
+                    id: 1,
+                    author: '曹雪芹',
+                    name: '红楼梦',
+                    price: 32.0
+                }, {
+                    id: 2,
+                    author: '施耐庵',
+                    name: '水浒传',
+                    price: 30.0
+                }, {
+                    id: 3,
+                    author: '罗贯中',
+                    name: '三国演义',
+                    price: 24.0
+                }, {
+                    id: 4,
+                    author: '吴承恩',
+                    name: '西游记',
+                    price: 20.0
+                }]
+            },
+            computed: {
+                sum: function () {
+                    var result = 0;
+                    for (var i = 0; i < this.books.length; i++) {
+                        result += Number(this.books[i].price);
+                    };
+                    return result;
+                }
+            },
+            methods: {
+                addBook: function () {
+                    this.book.id = this.books.length + 1;
+                    this.books.push(this.book);
+                    this.book = {
+                        id: 0,
+                        author: '',
+                        name: '',
+                        price: ''
 
-
-
-
+                    }
+                },
+                delBook: function (book) {
+                    this.books.forEach((element, index, arr) => {
+                        if (element.id === book.id) {
+                            console.log(index)
+                            arr.splice(index, 1)
+                            console.log(arr)
+                        }
+                    });
+                    console.log(book)
+                    // this.books.$remove(book);
+                },
+                sortBy: function (sortparam) {
+                    this.sortparam = sortparam;
+                }
+            }
+        })
+    </script>
 
 </body>
 
