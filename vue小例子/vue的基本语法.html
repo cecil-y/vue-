@@ -1083,6 +1083,7 @@
                 addBook: function () {
                     this.book.id = this.books.length + 1;
                     this.books.push(this.book);
+                    // this.book = '';
                     this.book = {
                         id: 0,
                         author: '',
@@ -1092,6 +1093,7 @@
                     }
                 },
                 delBook: function (book) {
+                    // this.books.$remove(book);
                     this.books.forEach((element, index, arr) => {
                         if (element.id === book.id) {
                             console.log(index)
@@ -1099,8 +1101,7 @@
                             console.log(arr)
                         }
                     });
-                    console.log(book)
-                    // this.books.$remove(book);
+                    // console.log(book);
                 },
                 sortBy: function (sortparam) {
                     this.sortparam = sortparam;
