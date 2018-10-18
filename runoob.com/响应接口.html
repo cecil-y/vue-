@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>响应接口</title>
+    <script src='../VueJS/vue.js'></script>
+</head>
+
+<body>
+    <p>例如以下实例，我们通过使用 $watch 属性来实现数据的监听，$watch 必须添加在 Vue 实例之外才能实现正确的响应。</p>
+    <p>实例中通过点击按钮自动加 1。setTimeout 设置两秒后计算器的值加上 20 。</p>
+    <div id='obj-1'>
+        <p style='font-size:25px;'>计数器：{{counter}}</p>
+        <button @click='counter ++ ' style='font-size:25px;'>点我</button>
+    </div>
+    <script>
+        var obj1 = new Vue({
+            el: '#obj-1',
+            data: {
+                counter: 1
+            }
+        });
+        obj1.$watch('counter', function (nval, oval) {
+            console.log('计数器的变化： ' + oval + '变为' + nval);
+        });
+        setTimeout(
+            function () {
+                obj1.counter = 20;
+            }, 2000
+        );
+    </script>
+    <p>Vue 不允许在已经创建的实例上动态添加新的根级响应式属性。</p>
+    <p>Vue 不能检测到对象属性的添加或删除，最好的方式就是在初始化实例前声明根级响应式属性，哪怕只是一个空值。</p>
+    <p>如果我们需要在运行过程中实现属性的添加或删除，则可以使用全局 Vue，Vue.set 和 Vue.delete 方法。</p>
+
+    <h1>Vue.set</h1>
+    <p>Vue.set 方法用于设置对象的属性，它可以解决 Vue 无法检测添加属性的限制，语法格式如下：</p>
+    <p>Vue.set( target, key, value)</p>
+    <p>参数说明：</p>
+    <ul>
+        <li>target:可以是对象或数组</li>
+        <li>key:可以是字符串或数字</li>
+        <li>value:可以是任何类型</li>
+    </ul>
+    <p>实例：</p>
+    <div id='obj-2'>
+        <p style='font-size:25px;'>计数器：{{products.id}}</p>
+        <button @click='products.id++ ' style='font-size:25px;'>点我</button>
+    </div>
+    <script>
+        var myproduct = { 'id': 1, name: 'book', 'price': '20.00' };
+        var obj2 = new Vue({
+            el: '#obj-2',
+            data: {
+                counter: 1,
+                products: myproduct
+            }
+        });
+        // 对obj2的products属性添加键值对也会影响myproduct变量
+        obj2.products.qty = '1';
+        console.log(obj2);
+        obj2.$watch('counter', function (nval, oval) {
+            console.log('计数器的变化： ' + oval + '变为' + nval);
+        })
+    </script>
+    <p>在产品中添加了数量属性 qty，但是 get/set 方法只可用于 id，name 和 price 属性，却不能在 qty 属性中使用。
+        我们不能通过添加 Vue 对象来实现响应。 Vue 主要在开始时创建所有属性。 如果我们要实现这个功能，可以通过 Vue.set 来实现：</p>
+    <div id='obj-3'>
+        <p style='font-size:25px;'>计数器：{{products.id}}</p>
+        <button @click='products.id++ ' style='font-size:25px;'>点我</button>
+    </div>
+    <script>
+        var myproduct = { 'id': 1, name: 'book', 'price': '20.00' };
+        var obj3 = new Vue({
+            el: '#obj-3',
+            data: {
+                counter: 1,
+                products: myproduct
+            }
+        });
+        Vue.set(myproduct, 'qty', 1);
+        console.log(obj3);
+        obj3.$watch('counter', function (nval, oval) {
+            console.log('计数器的变化： ' + oval + '变为' + nval);
+        })
+    </script>
+    <p>从控制台输出的结果可以看出 get/set 方法可用于qty 属性。</p>
+
+    <h1>Vue.delete</h1>
+    <p>Vue.delete 用于删除动态添加的属性 语法格式：</p>
+    <p>Vue.delete(target, key)</p>
+    <p>参数说明：</p>
+    <ul>
+        <li>target：可以是对象或数组</li>
+        <li>key：可以是字符串或数字</li>
+    </ul>
+    <div id='obj-4'>
+        <p style='font-size:25px;'>计数器：{{products.id}}</p>
+        <button @click='products.id++ ' style='font-size:25px;'>点我</button>
+    </div>
+    <script>
+        var myproduct = { 'id': 1, name: 'book', 'price': '20.00' };
+        var obj4 = new Vue({
+            el: '#obj-4',
+            data: {
+                counter: 1,
+                products: myproduct
+            }
+        });
+        Vue.delete(myproduct, 'price');
+        console.log(obj4);
+        obj3.$watch('counter', function (nval, oval) {
+            console.log('计数器的变化： ' + oval + '变为' + nval);
+        })
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

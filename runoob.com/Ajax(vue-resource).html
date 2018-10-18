@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax(vue-resource)</title>
+    <script src='../VueJS/vue.js'></script>
+    <script src='../VueJS/vue-resource.js'></script>
+</head>
+
+<body>
+    <h1>Get请求</h1>
+    <p>以下是一个简单的 Get 请求实例，请求地址是一个简单的 txt 文本：</p>
+    <div id='obj-1'>
+        <input type='button' @click='get()' value='点我异步获取数据Get' />
+    </div>
+    <script>
+        window.onload = function () {
+            var obj1 = new Vue({
+                el: '#obj-1',
+                data: {
+                    msg: 'Hello World!'
+                },
+                methods: {
+                    get: function () {
+                        //发送get请求
+                        this.$http.get('/try/ajax/ajax_info.txt').then(function (res) {
+                            document.write(res.body);
+                        }, function () {
+                            console.log('请求失败处理');
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+    <p>如果需要传递数据，可以使用 this.$http.get('get.php',jsonData) 格式，第二个参数 jsonData 就是传到后端的数据。</p>
+
+    <h1>post请求</h1>
+    <p>post 发送数据到后端，需要第三个参数 {emulateJSON:true}。</p>
+    <p>emulateJSON 的作用： 如果Web服务器无法处理编码为 application/json 的请求，你可以启用 emulateJSON 选项。</p>
+    <p>实例</p>
+    <div id='obj-2'>
+        <input type='button' @click='post()' value='点击我异步获取数据(Post)' />
+    </div>
+    <script>
+        window.onload = function () {
+            var obj2 = new Vue({
+                el: '#obj-2',
+                data: {
+                    msg: 'Hello World!',
+                },
+                methods: {
+                    post: function () {
+                        //发送post请求
+                        this.$http.post('/try/ajax/demo_test_post.php', { name: "菜鸟教程", url: "http://www.runoob.com" }, { emulateJSON: true }).then(function (res) {
+                            document.write(res.body);
+                        }, function (res) {
+                            console.log('请求失败处理，状态码：' + res.status);
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+
+    <h1>语法&API</h1>
+    <p>你可以使用全局对象方式 Vue.http 或者在一个 Vue 实例的内部使用 this.$http来发起 HTTP 请求。</p>
+    <p>基于全局Vue对象使用http</p>
+    <p>Vue.http.get('/someUrl'),[options]).then(successCallback,errorCallback);</p>
+    <p>Vue.http.post('/someUrl'),[body],[options].then(successCallback,errorCallback);</p>
+    <p>在一个Vue实例内使用$http</p>
+    <p>this.$http.get('/someUrl',[options]).then(successCallback, errorCallback);</p>
+    <p>this.$http.post('/someUrl',[body],[options]).then(successCallback, errorCallback);</p>
+
+    <p>vue-resource 提供了7种请求API（REST风格）：</p>
+    <ul>
+        <li>get(url, [options])</li>
+        <li>head(url, [options])</li>
+        <li>delete(url, [options])</li>
+        <li>jsonp(url, [options])</li>
+        <li>post(url, [body], [options])</li>
+        <li>put(url, [body], [options])</li>
+        <li>patch(url, [body], [options])</li>
+    </ul>
+    <p>除了 jsonp 以外，另外 6 种的 API 名称是标准的 HTTP 方法。</p>
+
+    <p>options参数说明：</p>
+    <table>
+        <thead>
+            <tr>
+                <th>参数</td>
+                <th>类型</td>
+                <th>描述</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>url</td>
+                <td>string</td>
+                <td>请求的目标URL</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>Object, FormData, string</td>
+                <td>作为请求体发送的数据</td>
+            </tr>
+            <tr>
+                <td>headers</td>
+                <td>Object</td>
+                <td>作为请求头部发送的头部对象</td>
+            </tr>
+            <tr>
+                <td>params</td>
+                <td>Object</td>
+                <td>作为URL参数的参数对象</td>
+            </tr>
+            <tr>
+                <td>method</td>
+                <td>string</td>
+                <td>HTTP方法（例如GET,POST,...)</td>
+            </tr>
+            <tr>
+                <td>timeout</td>
+                <td>number</td>
+                <td>请求超时（单位：毫秒）（0表示永不超时）</td>
+            </tr>
+            <tr>
+                <td>before</td>
+                <td>function(request)</td>
+                <td>在请求发送之前修改请求的回调函数</td>
+            </tr>
+            <tr>
+                <td>progress</td>
+                <td>function(event)</td>
+                <td>用于处理上传进度的回调函数ProgressEvent</td>
+            </tr>
+            <tr>
+                <td>credentials</td>
+                <td>boolean</td>
+                <td>是否需要出示用于跨站点请求的凭据</td>
+            </tr>
+            <tr>
+                <td>emulateHttp</td>
+                <td>boolean</td>
+                <td>是否需要通过设置x-HTTP-Method-Override头部并且以传统POST方式发送PUT，PATCH和DELETE请求</td>
+            </tr>
+            <tr>
+                <td>emulateJSON</td>
+                <td>boolean</td>
+                <td>设置请求体的类型为application/x-www-form-urlencoded</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>通过如下属性和方法处理一个请求获取到的响应对象：</p>
+    <div id='obj-3'>
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ thead.property }}</th>
+                    <th>{{ thead.type }}</th>
+                    <th>{{ thead.describe }}</th>
+                </tr>
+            </thead>
+            <tbody v-for='tbody in tbodys'>
+                <tr>
+                    <td>{{ tbody.property }}</td>
+                    <td>{{ tbody.type }}</td>
+                    <td>{{ tbody.describe }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var obj3 = new Vue({
+            el: '#obj-3',
+            data: {
+                thead: {
+                    property: '属性',
+                    type: '类型',
+                    describe: '描述'
+                },
+                tbodys: [{
+                    property: 'url',
+                    type: 'string',
+                    describe: '响应的URL源'
+                }, {
+                    property: 'body',
+                    type: 'Object, Blob, string',
+                    describe: '响应体数据'
+                }, {
+                    property: 'headers',
+                    type: 'Header',
+                    describe: '请求头部对象'
+                }, {
+                    property: 'ok',
+                    type: 'boolean',
+                    describe: '当HTTP响应码为200到299之间的数值时该值为true'
+                }, {
+                    property: 'status',
+                    type: 'number',
+                    describe: 'HTTP响应码'
+                }, {
+                    property: 'statusText',
+                    type: 'string',
+                    describe: 'HTTP响应状态'
+                }]
+            }
+        })
+    </script>
+    <div id='obj-4'>
+        <table>
+            <thead>
+                <tr>
+                    <th>{{thead.property}}</th>
+                    <th>{{thead.type}}</th>
+                    <th>{{thead.describe}}</th>
+                </tr>
+            </thead>
+            <tbody v-for='tbody in tbodys'>
+                <tr>
+                    <td>{{tbody.property}}</td>
+                    <td>{{tbody.type}}</td>
+                    <td>{{tbody.describe}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var obj4 = new Vue({
+            el: '#obj-4',
+            data: {
+                thead: {
+                    property: '方法',
+                    type: '类型',
+                    describe: '描述'
+                },
+                tbodys: [{
+                    property: 'text()',
+                    type: '约定值',
+                    describe: '以字符串方式返回响应体'
+                }, {
+                    property: 'json()',
+                    type: '约定值',
+                    describe: '以格式化后的json对象方式返回响应体'
+                }, {
+                    property: 'blob()',
+                    type: '约定值',
+                    describe: '以二进制Blob对象方式返回响应体'
+                }]
+            }
+        })
+    </script>
+
+</body>
+
+</html>
